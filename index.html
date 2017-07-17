@@ -37,29 +37,34 @@
 
 	<script>
 		angular.module('listaTelefonica', ["ngMessages"]);
-		angular.module('listaTelefonica').controller('listaTelefonicaCnt', function ($scope, $http, $filter){
+		angular.module('listaTelefonica').controller('listaTelefonicaCnt', function ($scope, $http){
 
 			$scope.app = 'Lista Telefonica'
 
 			$scope.contatos = [];
+			$scope.operadoras = [];
 
 			var carregarContatos = function (){
 				$http.get("http://localhost:3412/contatos").success(function(data, status){
 					$scope.contatos = data;
+				}).error(function(data, status){
+						$scope.message = "Aconteceu um Problema: " + data;
 				});
 			};
 
-			$scope.operadoras = [
-				{nome: 'Oi', codigo: 14, categoria: 'Celular', preco: 2},
-				{nome: 'Vivo', codigo: 15, categoria: 'Celular', preco: 1},
-				{nome: 'Tim', codigo: 41, categoria: 'Celular', preco: 3},
-				{nome: 'GVT', codigo: 25, categoria: 'Fixo', preco: 2},
-				{nome: 'Embratel', codigo: 21, categoria: 'Fixo', preco: 1}
-			];
+			var carregarOperadoras = function(){
+				$http.get("http://localhost:3412/operadoras").success(function(data, status){
+					$scope.operadoras = data;
+				});
+			};
+
 			$scope.adicionarContato = function (Contato){
-				$scope.contatos.push(angular.copy(Contato));
-				delete $scope.Contato;
-				$scope.contatoForm.$setPristine();
+				Contato.data = new Date();
+				$http.post("http://localhost:3412/contatos",Contato).success(function(data){
+					delete $scope.Contato;
+					$scope.contatoForm.$setPristine();
+					carregarContatos();
+				});
 			};
 
 			$scope.apagarContatos = function (contatos){
@@ -79,6 +84,7 @@
       };
 
 			carregarContatos();
+			carregarOperadoras();
 		});
 	</script>
 </head>
@@ -87,6 +93,7 @@
 
 	<div class="jumbotron">
 		<h3> {{app}} </h3>
+		<h5> {{message}} </h5>
                 <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que você esta buscando ?"/>
 
                 <table  class="table table-striped" ng-show="contatos.length > 0">
