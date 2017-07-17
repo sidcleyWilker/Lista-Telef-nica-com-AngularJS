@@ -34,16 +34,21 @@
 	<script src='lib/angular/angular.js'></script>
         <script src='lib/angular/angular-locale_pt-br.js'></script>
 	<script src='lib/angular/angular-messages.js'></script>
+
 	<script>
 		angular.module('listaTelefonica', ["ngMessages"]);
-		angular.module('listaTelefonica').controller('listaTelefonicaCnt', function ($scope, $filter){
-			$scope.app = 'Lista Telefonica'
-			$scope.contatos = [
-				{nome: $filter('uppercase')('Pedro'), telefone: '9999-9999', data: new Date()},
-				{nome: 'ana', telefone: '8888-8888', data: new Date()},
-				{nome: 'maria', telefone: '7777-7777', data: new Date()}
+		angular.module('listaTelefonica').controller('listaTelefonicaCnt', function ($scope, $http, $filter){
 
-			];
+			$scope.app = 'Lista Telefonica'
+
+			$scope.contatos = [];
+
+			var carregarContatos = function (){
+				$http.get("http://localhost:3412/contatos").success(function(data, status){
+					$scope.contatos = data;
+				});
+			};
+
 			$scope.operadoras = [
 				{nome: 'Oi', codigo: 14, categoria: 'Celular', preco: 2},
 				{nome: 'Vivo', codigo: 15, categoria: 'Celular', preco: 1},
@@ -64,14 +69,16 @@
 			};
 
 			$scope.isContaoSelecionado = function (contatos){
-				return contatos.some( function(contato){
+				return contatos.some(function(contato){
 					return contato.selecionado;
 				});
 			};
-                        
-                        $scope.ordenarPor = function (campo){
-                            $scope.criterioDeOrdenacao = campo;
-                        };
+
+      $scope.ordenarPor = function (campo){
+      	$scope.criterioDeOrdenacao = campo;
+      };
+
+			carregarContatos();
 		});
 	</script>
 </head>
@@ -81,7 +88,7 @@
 	<div class="jumbotron">
 		<h3> {{app}} </h3>
                 <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que você esta buscando ?"/>
-		
+
                 <table  class="table table-striped" ng-show="contatos.length > 0">
 			<tr>
 				<th></th>
@@ -103,7 +110,7 @@
 		<hr/>
 
 		<form name="contatoForm">
-			<input class="form-control" type="text" ng-model='Contato.nome' placeholder="Nome" name="nome" ng-required='true' 
+			<input class="form-control" type="text" ng-model='Contato.nome' placeholder="Nome" name="nome" ng-required='true'
 				ng-minlength='10'/>
 			<input class="form-control" type="text" ng-model='Contato.telefone' placeholder='Telefone' name="telefone"
 			 	ng-required='true' ng-pattern="/^\d{4,5}-\d{4}/"/>
@@ -121,7 +128,7 @@
 			</div>
 		</div>
 
-		
+
 
 		<div class="alert alert-danger" ng-show='contatoForm.telefone.$error.required && contatoForm.telefone.$dirty'>
 			Por favor, preencha o telefone!
@@ -135,10 +142,10 @@
 		Adicionar Contato</button>
 		<button class="btn btn-danger btn-block" ng-click='apagarContatos(contatos)' ng-if='isContaoSelecionado(contatos)'>
 		Deletar Contato</button>
-		
+
 	</div>
 
-	<div ng-include="'footer.html'"></div>x	
+	<div ng-include="'footer.html'"></div>x
 
 </body>
 </html>
