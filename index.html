@@ -15,6 +15,8 @@
 	<script src="js/services/contatosAPIService.js"></script>
 	<script src="js/services/operadorasAPIService.js"></script>
 	<script src="js/value/configValue.js"></script>
+	<script src="js/services/serialGeneratorService.js"></script>
+	<script src="js/config/serialGeneratorConfig.js"></script>
 </head>
 
 <body ng-controller='listaTelefonicaCnt'>
@@ -27,19 +29,20 @@
                 <table  class="table table-striped" ng-show="contatos.length > 0">
 			<tr>
 				<th></th>
-                                <th><a href="" ng-click="ordenarPor('nome')"/>Nome</th>
+				<th>Seria</th>
+        <th><a href="" ng-click="ordenarPor('nome')"/>Nome</th>
 				<th><a href="" ng-click="ordenarPor('telefone')"/>Telefone</th>
 				<th>Operadora</th>
-                                <th>Data</th>
-				<th></th>
+        <th>Data</th>
 			</tr>
+
 			<tr ng-class="{selecionado: contato.selecionado}" ng-repeat="contato in contatos | filter:criterioDeBusca | orderBy:criterioDeOrdenacao">
 				<td> <input type="checkbox" ng-model='contato.selecionado' /> </td>
+				<td>{{ contato.serial }}</td>
 				<td> {{contato.nome}} </td>
 				<td> {{ contato.telefone }} </td>
 				<td> {{ contato.operadora.nome }} </td>
-                                <td> {{ contato.data | date: "dd/mm/yyyy"}} </td>
-				<td><div style="width: 20px; height: 20px;" ng-style="{'background-color': contato.cor }"></div></td>
+        <td> {{ contato.data | date: "dd/mm/yyyy"}} </td>
 			</tr>
 		</table>
 		<hr/>

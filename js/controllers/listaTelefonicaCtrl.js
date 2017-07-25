@@ -1,4 +1,4 @@
-angular.module('listaTelefonica').controller('listaTelefonicaCnt', function ($scope, contatosAPI,operadorasAPI){
+angular.module('listaTelefonica').controller('listaTelefonicaCnt', function ($scope, contatosAPI,operadorasAPI, serialGenerator){
 
   $scope.app = 'Lista Telefonica'
 
@@ -20,6 +20,7 @@ angular.module('listaTelefonica').controller('listaTelefonicaCnt', function ($sc
   };
 
   $scope.adicionarContato = function (Contato){
+    Contato.serial = serialGenerator.generate();
     Contato.data = new Date();
     contatosAPI.saveContato(Contato).success(function(data){
       delete $scope.Contato;
