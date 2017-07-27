@@ -19,6 +19,7 @@
     <script src="js/services/serialGeneratorService.js"></script>
     <script src="js/config/serialGeneratorConfig.js"></script>
     <script src="js/filters/nameFilter.js"></script>
+    <script src="js/filters/ellipsisFilter.js"></script>
 </head>
 
 <body ng-controller='listaTelefonicaCnt'>
@@ -41,7 +42,7 @@
             <tr ng-class="{selecionado: contato.selecionado}" ng-repeat="contato in contatos | filter:criterioDeBusca | orderBy:criterioDeOrdenacao">
                 <td> <input type="checkbox" ng-model='contato.selecionado' /> </td>
                 <td>{{ contato.serial }}</td>
-                <td> {{contato.nome | nome}} </td>
+                <td> {{contato.nome | nome | ellipsis:8}} </td>
                 <td> {{ contato.telefone }} </td>
                 <td> {{ contato.operadora.nome }} </td>
                 <td> {{ contato.data | date: "dd/mm/yyyy"}} </td>
