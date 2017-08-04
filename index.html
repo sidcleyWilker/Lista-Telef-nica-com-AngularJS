@@ -3,10 +3,12 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width-device-width, initial-scale=1.0" />
     <title>Lista Telefonica</title>
 
-    <link rel='stylesheet' type="text/css" href='lib/bootstrap/bootstrap.css' />
-    <link rel="stylesheet" type="text/css" href="css/app.css" />
+    <link rel='stylesheet' type="text/css" href='lib/bootstrap/bootstrap.css' media="screen" />
+    <link rel="stylesheet" type="text/css" href="css/app.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="css/ui.css" media="screen" />
 
     <script src='lib/angular/angular.js'></script>
     <script src='lib/angular/angular-locale_pt-br.js'></script>
@@ -20,13 +22,18 @@
     <script src="js/config/serialGeneratorConfig.js"></script>
     <script src="js/filters/nameFilter.js"></script>
     <script src="js/filters/ellipsisFilter.js"></script>
+    <script src="js/directives/uiAlertDirective.js"></script>
 </head>
 
 <body ng-controller='listaTelefonicaCnt'>
 
     <div class="jumbotron">
         <h3> {{app}} </h3>
-        <h5> {{message}} </h5>
+
+        <ui-alert title="Ops, Aconteceu um problema !">
+            {{error}}
+        </ui-alert>
+
         <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que você esta buscando ?" />
 
         <table class="table table-striped" ng-show="contatos.length > 0">
